@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title> Bất ngờ lắm nè </title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;font-family:Arial,sans-serif}
+body{overflow:hidden;background:#ffd6e5;color:#5a1834}
+#countdownScreen{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:linear-gradient(135deg,#ffb6d0,#ffddea 55%,#ff9fc2)}
+.countBox{width:min(92%,500px);padding:38px 22px;border-radius:32px;background:#ffffff7a;border:2px solid #ffffffcc;box-shadow:0 20px 60px #8d1f4e38;backdrop-filter:blur(10px)}
+.cake{font-size:65px;animation:float 2.5s ease-in-out infinite}h1{margin:8px 0;color:#9e164f;font-size:clamp(28px,8vw,48px)}.date{font-size:21px;font-weight:bold;margin:12px 0 25px}
+.timer{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.time{min-width:75px;padding:12px 8px;border-radius:18px;background:#fff;color:#9e164f;box-shadow:0 8px 20px #b64a7040}.time b{display:block;font-size:27px}.time span{font-size:12px}.note{margin-top:24px;font-size:15px}
+#secretBtn{position:fixed;right:7px;bottom:7px;width:18px;height:18px;border:0;border-radius:50%;opacity:.12;background:#7b1642;z-index:30;cursor:pointer}
+#birthdayScreen{position:fixed;inset:0;z-index:10;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .7s;background:linear-gradient(180deg,#ffd2e1,#fff0f5 55%,#ffd0df)}
+#birthdayScreen.show{opacity:1;visibility:visible;pointer-events:auto}#birthdayScreen.show~.content{width:min(100%,900px);margin:auto;padding:35px 16px 70px;text-align:center}
+.hero{padding:25px 15px 30px;border-radius:30px;background:#ffffff85;box-shadow:0 15px 45px #a52d5b22}.miniCake{font-size:55px}.hero h2{font-size:clamp(30px,8vw,52px);color:#a51650;margin:8px 0}.hero p{font-size:18px;margin:8px}
+.section{margin-top:24px;padding:22px 12px;border-radius:28px;background:#ffffff8c;box-shadow:0 12px 35px #a52d5b18}.section h3{margin:0 0 18px;font-size:25px;color:#991546}
+.gallery{display:flex;gap:14px;overflow-x:auto;padding:25px calc(50% - 115px);scroll-snap-type:x mandatory;scrollbar-width:none}.gallery::-webkit-scrollbar{display:none}
+.photo{flex:0 0 230px;height:300px;border-radius:22px;overflow:hidden;scroll-snap-align:center;transform:scale(.78) translateY(20px);opacity:.62;transition:.35s ease;box-shadow:0 12px 25px #77123d35;background:#fff}.photo.active{transform:scale(1);opacity:1;box-shadow:0 18px 40px #8b174555}.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.placeholder{height:100%;display:flex;align-items:center;justify-content:center;padding:20px;color:#a51650;font-weight:bold;background:linear-gradient(145deg,#ffe6ef,#ffc3d8)}
+.wish{font-size:17px;line-height:1.8;text-align:left;padding:22px;border-radius:20px;background:#fff8fb;border-left:5px solid #e95d91;white-space:pre-line}.signature{text-align:right;margin-top:15px;font-weight:bold;color:#a51650}
+.musicBtn{display:none;position:fixed;right:16px;bottom:16px;z-index:50;width:48px;height:48px;border:0;border-radius:50%;background:#a51650;color:white;font-size:21px;box-shadow:0 8px 25px #8b174555}
+#musicPopup{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:#410a1e80;backdrop-filter:blur(7px);padding:20px}#musicPopup.show{display:flex}
+.popupBox{width:min(92%,430px);padding:32px 22px;text-align:center;border-radius:28px;background:#fff4f8;box-shadow:0 25px 70px #520d2d66;animation:pop .45s ease}.popupBox .icon{font-size:55px}.popupBox h3{color:#a51650;font-size:24px;margin:10px 0}
+.enter{border:0;border-radius:999px;padding:14px 28px;background:#d93670;color:#fff;font-weight:bold;font-size:16px;cursor:pointer;box-shadow:0 10px 25px #d9367040}
+.confetti{position:fixed;top:-20px;font-size:20px;z-index:90;animation:fall 2.5s linear forwards}
+@keyframes float{50%{transform:translateY(-9px)}}@keyframes pop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}@keyframes fall{to{transform:translateY(110vh) rotate(600deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<section id="countdownScreen">
+<div class="countBox"><div class="cake">🎂</div><h1>HAPPY BIRTHDAY TO YOU 🫵</h1><div class="date">15 / 09 / 1992</div>
+<div class="timer"><div class="time"><b id="days">00</b><span>NGÀY</span></div><div class="time"><b id="hours">00</b><span>GIỜ</span></div><div class="time"><b id="minutes">00</b><span>PHÚT</span></div><div class="time"><b id="seconds">00</b><span>GIÂY</span></div></div>
+<div class="note">❤️ Vui lòng vào đúng ngày 15/9 sẽ có bất ngờ ❤️</div></div>
+
+</section>
+
+<section id="birthdayScreen"><main class="content">
+<div class="hero"><div class="miniCake">🎉🎂🎉</div><h2>CHÚC MỪNG SINH NHẬT BA</h2><p>❤️ 15 / 09 ❤️</p></div>
+<div class="section"><h3>📸 Ảnh </h3><div class="gallery" id="gallery">
+<div class="photo"><img src="FB_IMG_1767798139153.jpg" alt="Ảnh Ba 1"></div>
+<div class="photo"><img src="FB_IMG_1767798145802.jpg" alt="Ảnh Ba 2"></div>
+<div class="photo"><img src="FB_IMG_1788758954029.jpg" alt="Ảnh Ba 3"></div>
+<div class="photo"><img src="FB_IMG_1788758943615.jpg" alt="Ảnh Ba 4"></div>
+<div class="photo"><img src="FB_IMG_1788758987972.jpg" alt="Ảnh Ba 5"></div>
+<div class="photo"><img src="FB_IMG_1788759019097.jpg" alt="Ảnh Ba 6"></div>
+</div></div>
+<div class="section"><h3>💌 Lời chúc gửi Ba</h3><div class="wish">Ba thân yêu,
+
+Vậy là bây giờ ba cũng đã 34 tuổi rồi chắc là cũng sắp già rồi
+nhân dịp hôm nay là sinh nhật của ba con và em cũng đã chuẩn 
+bị kĩ rồi, mặc dù không thể cho ba được món quà vật chất nhưng
+năm nay tụi con sẽ cố gắng học thiệt là giỏi nè, cố gắng sống tốt 
+hơn để ba khỏi buồn nè và nghe lời hơn. Con và em cũng xin chúc ba 
+thật nhiều sức khoẻ, thành công trong cuộc sống và sống lâu hơn để 
+ở với tụi con nheee
+
+❤️ Chúc Ba luôn vui và thật nhiều sức khỏe!
+<div class="signature">— Con ❤️</div></div></div>
+</main></section>
+
+<div id="musicPopup"><div class="popupBox"><div class="icon">🎂</div><h3>Hello còn nhiều bất ngờ lắm nhee</h3><p>Vui lòng chạm vào màn hình để tiếp tục  ❤️</p><button class="enter" id="enterBtn">CLICK TO ENTER</button></div></div>
+<audio id="music" loop preload="metadata"><source src="nhac-sinh-nhat.mp3" type="audio/mpeg"></audio>
+
+
+<script>
+const target=new Date("2026-09-15T00:00:00+07:00").getTime(),countdown=document.getElementById("countdownScreen"),birthday=document.getElementById("birthdayScreen"),popup=document.getElementById("musicPopup"),music=document.getElementById("music");
+function openBirthday(){countdown.style.display="none";birthday.classList.add("show");popup.classList.add("show")}
+function updateCountdown(){let diff=target-Date.now();if(diff<=0){["days","hours","minutes","seconds"].forEach(id=>document.getElementById(id).textContent="00");openBirthday();return}let d=Math.floor(diff/86400000),h=Math.floor(diff%86400000/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);days.textContent=String(d).padStart(2,"0");hours.textContent=String(h).padStart(2,"0");minutes.textContent=String(m).padStart(2,"0");seconds.textContent=String(s).padStart(2,"0")}
+setInterval(updateCountdown,1000);updateCountdown();
+
+const secretBtn=document.createElement("button");
+secretBtn.id="secretBtn";
+secretBtn.setAttribute("aria-label","Mở trang");
+document.getElementById("countdownScreen").appendChild(secretBtn);
+secretBtn.addEventListener("click",openBirthday);
+
+let entered = false;
+
+async function enterBirthday(e){
+  if(e) e.preventDefault();
+  if(entered) return;
+  entered = true;
+
+  // Cho vào trang ngay cả khi file nhạc chưa có.
+  popup.classList.remove("show");
+  document.body.style.overflow = "auto";
+  birthday.style.pointerEvents = "auto";
+  confetti();
+
+  // Sau đó mới thử phát nhạc.
+  try{
+    music.volume = 0.75;
+    await music.play();
+  }catch(err){
+    console.log("Chưa phát được nhạc:", err);
+  }
+}
+
+// Bấm hoặc chạm đều hoạt động.
+enterBtn.addEventListener("click", enterBirthday);
+enterBtn.addEventListener("touchend", enterBirthday, {passive:false});
+popup.addEventListener("click", enterBirthday);
+popup.addEventListener("touchend", enterBirthday, {passive:false});
+
+const gallery=document.getElementById("gallery");
+let photos=[...gallery.querySelectorAll(".photo")];
+const originalPhotos=photos.slice();
+const photoCount=originalPhotos.length;
+
+// Nhân bản 6 ảnh ở hai đầu để vuốt qua cuối/đầu vẫn tiếp tục liên tục.
+originalPhotos.forEach(photo=>{
+  const clone=photo.cloneNode(true);
+  gallery.insertBefore(clone,gallery.firstChild);
+});
+originalPhotos.forEach(photo=>{
+  const clone=photo.cloneNode(true);
+  gallery.appendChild(clone);
+});
+photos=[...gallery.querySelectorAll(".photo")];
+
+function centerPhoto(photo){
+  gallery.scrollLeft=photo.offsetLeft-(gallery.clientWidth-photo.offsetWidth)/2;
+}
+
+function updateActive(){
+  const center=gallery.scrollLeft+gallery.clientWidth/2;
+  let best=null,dist=Infinity;
+  photos.forEach(p=>{
+    const c=p.offsetLeft+p.offsetWidth/2;
+    const d=Math.abs(c-center);
+    if(d<dist){dist=d;best=p}
+  });
+  photos.forEach(p=>p.classList.toggle("active",p===best));
+}
+
+// Bắt đầu ở 6 ảnh gốc nằm giữa.
+setTimeout(()=>{
+  centerPhoto(photos[photoCount]);
+  updateActive();
+},100);
+
+let adjusting=false;
+gallery.addEventListener("scroll",()=>{
+  requestAnimationFrame(()=>{
+    updateActive();
+    if(adjusting)return;
+
+    const originals=photos.slice(photoCount,photoCount*2);
+    const center=gallery.scrollLeft+gallery.clientWidth/2;
+    const firstCenter=originals[0].offsetLeft+originals[0].offsetWidth/2;
+    const lastCenter=originals[photoCount-1].offsetLeft+originals[photoCount-1].offsetWidth/2;
+
+    // Vuốt qua ảnh đầu -> chuyển sang ảnh tương ứng ở bộ gốc.
+    if(center < firstCenter){
+      let index=0,best=Infinity;
+      for(let i=0;i<photoCount;i++){
+        const c=photos[i].offsetLeft+photos[i].offsetWidth/2;
+        const d=Math.abs(c-center);
+        if(d<best){best=d;index=i}
+      }
+      adjusting=true;
+      centerPhoto(originals[index]);
+      updateActive();
+      requestAnimationFrame(()=>adjusting=false);
+    }
+
+    // Vuốt qua ảnh cuối -> quay về ảnh tương ứng ở bộ gốc.
+    else if(center > lastCenter){
+      let index=0,best=Infinity;
+      for(let i=0;i<photoCount;i++){
+        const c=photos[photoCount*2+i].offsetLeft+photos[photoCount*2+i].offsetWidth/2;
+        const d=Math.abs(c-center);
+        if(d<best){best=d;index=i}
+      }
+      adjusting=true;
+      centerPhoto(originals[index]);
+      updateActive();
+      requestAnimationFrame(()=>adjusting=false);
+    }
+  });
+});
+
+window.addEventListener("resize",()=>{
+  const active=gallery.querySelector(".photo.active")||photos[photoCount];
+  setTimeout(()=>{
+    centerPhoto(active);
+    updateActive();
+  },50);
+});
+function confetti(){const symbols=["🎉","✨","💗","🌸","🎊"];for(let i=0;i<35;i++){const e=document.createElement("div");e.className="confetti";e.textContent=symbols[Math.floor(Math.random()*symbols.length)];e.style.left=Math.random()*100+"vw";e.style.animationDelay=Math.random()*1.2+"s";document.body.appendChild(e);setTimeout(()=>e.remove(),4000)}}
+</script>
+</body>
+  </html>
